@@ -1,0 +1,15 @@
+name: TuneUp
+version: '${version}'
+main: dev.louis.tuneup.TuneUpPlugin
+api-version: '26.3'
+description: Lightweight server optimizer plus easier access to key enchanted books.
+author: Louis
+commands:
+  tuneup:
+    description: Show TuneUp status, reload its config or toggle the book boost
+    usage: /tuneup <status|reload|books [on|off|toggle]>
+    permission: tuneup.admin
+permissions:
+  tuneup.admin:
+    description: Use /tuneup
+    default: op

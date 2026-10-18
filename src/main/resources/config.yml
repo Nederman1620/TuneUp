@@ -1,0 +1,108 @@
+# TuneUp configuration. Use /tuneup reload after editing.
+
+# Worlds TuneUp should leave alone completely (entity limiter + dynamic distance).
+disabled-worlds: []
+
+# ---------------------------------------------------------------------------
+# Entity limiter: trims crowded chunks (mob farms gone wild, item piles).
+# Work is spread over many ticks so it never causes a lag spike itself.
+# ---------------------------------------------------------------------------
+entity-limiter:
+  enabled: true
+  scan-interval-seconds: 30
+  chunks-per-tick: 20
+  # Chunks with fewer entities than this are skipped (cheap early exit).
+  min-entities-to-scan: 24
+  # Max mobs of the SAME type per chunk. Oldest extras are removed first.
+  hostile-cap-per-type: 24
+  other-cap-per-type: 48
+  # Max dropped items per chunk. Protected items are never removed.
+  item-cap-per-chunk: 150
+  # Mobs of these types are never touched (vanilla entity ids, no namespace).
+  exempt-types:
+    - villager
+    - wandering_trader
+    - iron_golem
+    - snow_golem
+    - ender_dragon
+    - wither
+    - warden
+    - allay
+  # Items that are never removed. Wildcards: DIAMOND* or *SHULKER_BOX
+  protected-items:
+    - "DIAMOND*"
+    - "NETHERITE*"
+    - "ENCHANTED_BOOK"
+    - "*SHULKER_BOX"
+    - "ELYTRA"
+    - "TOTEM_OF_UNDYING"
+    - "NETHER_STAR"
+    - "BEACON"
+    - "TRIDENT"
+    - "MACE"
+  # Named, leashed, tamed, mounted mobs and mobs with passengers are always safe.
+
+# ---------------------------------------------------------------------------
+# Dynamic simulation distance: lowers simulation distance when TPS drops and
+# raises it back (up to the original value) when the server recovers.
+# ---------------------------------------------------------------------------
+dynamic-distance:
+  enabled: true
+  check-interval-seconds: 10
+  low-tps: 17.5
+  high-tps: 19.5
+  # How many checks in a row must be low/high before changing anything.
+  streak-required: 3
+  min-simulation-distance: 4
+  # Also adjust view distance (causes chunk resends, off by default).
+  adjust-view-distance: false
+  min-view-distance: 6
+
+# ---------------------------------------------------------------------------
+# Enchanted book boost. Everything here only changes WHAT you get, using normal
+# gameplay sources. No commands that hand out books.
+# ---------------------------------------------------------------------------
+books:
+  enabled: true
+  # Pool of enchantments to favour (vanilla ids) and their relative weights.
+  preferred:
+    mending: 10
+    unbreaking: 10
+    fortune: 8
+    efficiency: 10
+    protection: 8
+    sharpness: 6
+    silk_touch: 5
+    looting: 4
+    feather_falling: 3
+    respiration: 2
+    thorns: 1
+
+  # Librarian villagers: when a librarian rolls an enchanted book trade, it may
+  # become one of the preferred enchantments instead.
+  villagers:
+    enabled: true
+    chance: 0.65
+    always-max-level: true
+    # Emerald price cap (vanilla can reach 64).
+    max-cost: 40
+
+  # Fishing: treasure books can become preferred books, and ordinary fish
+  # catches have a small chance to turn into one.
+  fishing:
+    enabled: true
+    replace-chance: 0.85
+    bonus-chance: 0.01
+
+  # Dungeon / mineshaft / temple / etc. chests (loot tables under chests/).
+  loot-chests:
+    enabled: true
+    chance: 0.10
+
+  # Enchanting table on a plain book: chance to get a preferred enchantment
+  # (this is how you can get mending-style books without luck). The level
+  # scales with the enchanting cost (30 = max level).
+  enchanting-table:
+    enabled: true
+    chance: 0.5
+    min-level-cost: 20
